@@ -1,4 +1,7 @@
 import React from 'react';
 import App from './App';
+import loadStats from 'promise?global,stats!../stats.json';
 
-React.render(<App />, document.getElementById('root'));
+loadStats().then(stats =>
+  React.render(<App stats={stats} />, document.getElementById('root'))
+);
