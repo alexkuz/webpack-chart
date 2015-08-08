@@ -1,0 +1,52 @@
+{
+  "parser": "babel-eslint",
+  "rules": {
+    "no-trailing-spaces": [1],
+    "space-before-blocks": [2, "always"],
+    "no-unused-expressions": [0],
+    "no-underscore-dangle": [0],
+    "no-reserved-keys": [2],
+    "no-multi-spaces": [0],
+    "no-unused-vars": [1],
+    "no-loop-func": [0],
+    "new-cap": [0],
+    "key-spacing": [0],
+    "max-len": [1, 100],
+    "strict": [0],
+    "eol-last": [1],
+    "no-console": [1],
+    "indent": [
+      2,
+      2
+    ],
+    "quotes": [
+      2,
+      "single",
+      "avoid-escape"
+    ],
+    "curly": [0],
+    "react/jsx-boolean-value": 1,
+    "react/jsx-quotes": 1,
+    "react/jsx-no-undef": 2,
+    "react/jsx-uses-react": 2,
+    "react/jsx-uses-vars": 2,
+    "react/no-did-mount-set-state": 1,
+    "react/no-did-update-set-state": 1,
+    "react/no-multi-comp": 0,
+    "react/no-unknown-property": 1,
+    "react/react-in-jsx-scope": 1,
+    "react/self-closing-comp": 1,
+    "react/wrap-multilines": 1
+  },
+  "plugins": [
+    "react"
+  ],
+  "settings": {
+    "ecmascript": 6,
+    "jsx": true
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  }
+}
