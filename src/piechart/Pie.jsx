@@ -4,14 +4,14 @@ import React, { Component, PropTypes } from 'react';
 import getTextCoordinates from './getTextCoordinates';
 import createSliceTree from './createSliceTree';
 import Ring from './Ring';
-import JSS from 'jss';
+import jss from 'jss';
 import JssVendorPrefixer from 'jss-vendor-prefixer';
 import CSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import getSliceRadius from './getSliceRadius';
 import defaultGetColor from './getColor';
 
-const jss = JSS.create();
 jss.use(JssVendorPrefixer);
+
 const sheet = jss.createStyleSheet({
   wrapper: {
     position: 'relative'
@@ -115,28 +115,20 @@ function createRingClasses(props) {
       .reduce((rules, idx) => ({
         ...rules,
         [`.${pieChart}-appear.${rings['ring' + idx]}`]: {
-          opacity: 0,
           transform: 'scale(0.5)'
         },
         [`.${pieChart}-appear-active.${rings['ring' + idx]}`]: {
-          opacity: 1,
-          'transform-origin': '50% 50%',
           transform: 'scale(1)',
           transition: 'transform 0.5s ease-out ' + (idx / 5) + 's'
         },
         [`.${pieChart}-enter.${rings['ring' + idx]}`]: {
-          opacity: 0,
           transform: 'scale(0.5)'
         },
         [`.${pieChart}-enter-active.${rings['ring' + idx]}`]: {
-          opacity: 1,
-          'transform-origin': '50% 50%',
           transform: 'scale(1)',
           transition: 'transform 0.5s ease-out ' + (idx / 5) + 's'
         },
         [`.${pieChart}-leave.${rings['ring' + idx]}`]: {
-          opacity: 1,
-          'transform-origin': '50% 50%',
           transform: 'scale(1)'
         },
         [`.${pieChart}-leave-active.${rings['ring' + idx]}`]: {
@@ -231,20 +223,22 @@ export default class Pie extends Component {
              xmlns="http://www.w3.org/2000/svg"
              version="1.1"
              className={sheet.classes.svg}>
-          <CSSTransitionGroup component={'g'}
-                              transitionName={transitionName}
-                              transitionAppear={true}
-                              key={this.state.resetIdx}>
-            {sliceTree.map((block, idx) =>
-                <Ring className={getRingClassName(block.level)}
-                    key={idx + '-' + (getKey(data))}
-                    slices={block.slices}
-                    level={block.level}
-                    {...{hole, radius, center, getColor,
-                         factor, getSliceClassName,
-                         stroke, strokeWidth, onClick }} />
-            )}
-          </CSSTransitionGroup>
+          <g style={{transform: `translate(${center}px, ${center}px)`}}>
+            <CSSTransitionGroup component={'g'}
+                                transitionName={transitionName}
+                                transitionAppear={true}
+                                key={this.state.resetIdx}>
+              {sliceTree.map((block, idx) =>
+                  <Ring className={getRingClassName(block.level)}
+                      key={idx + '-' + (getKey(data))}
+                      slices={block.slices}
+                      level={block.level}
+                      {...{hole, radius, center, getColor,
+                           factor, getSliceClassName,
+                           stroke, strokeWidth, onClick }} />
+              )}
+            </CSSTransitionGroup>
+          </g>
         </svg>
       </div>
     );

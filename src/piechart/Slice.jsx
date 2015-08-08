@@ -20,8 +20,8 @@ export default class Slice extends Component {
     const endRadius = p.sliceRadius.end;
 
     // Get angle points
-    a = getAnglePoint(p.startAngle, p.startAngle + angle, endRadius, center, center);
-    b = getAnglePoint(p.startAngle, p.startAngle + angle, startRadius, center, center);
+    a = getAnglePoint(p.startAngle, p.startAngle + angle, endRadius, 0, 0);
+    b = getAnglePoint(p.startAngle, p.startAngle + angle, startRadius, 0, 0);
 
     path.push(`M${a.x1},${a.y1}`);
     path.push(`A${endRadius},${endRadius} 0 ${(angle > 180 ? 1 : 0)},1 ${a.x2},${a.y2}`);

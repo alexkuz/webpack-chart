@@ -7,7 +7,7 @@
     "stats": "webpack --profile --json > stats.json",
     "start": "node server.js",
     "lint": "eslint src",
-    "version": "npm run stats && npm run build"
+    "version": "npm run build"
   },
   "repository": {
     "type": "git",
