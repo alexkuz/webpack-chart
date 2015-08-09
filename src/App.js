@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import Pie from './piechart/Pie';
 import Input from 'react-bootstrap/lib/Input';
 import Jumbotron from 'react-bootstrap/lib/Jumbotron';
+import CakeChart from 'cake-chart';
+
+console.log(CakeChart);
 
 function getTreeFromStats(json) {
   const tree = json.modules.reduce((t, module) => {
@@ -67,6 +69,15 @@ function getGrayColor(level) {
   return `rgb(${gray}, ${gray}, ${gray})`;
 }
 
+function getLabel(slice) {
+  return (slice.end - slice.start > 15) &&
+    (
+      slice.level === 0 ?
+        `${slice.data.label || 'All'} (size: ${getSize(slice.data.value)})` :
+        slice.data.label || slice.data.value
+    );
+}
+
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -93,17 +104,12 @@ export default class App extends Component {
           </div>
         </Jumbotron>
         {selectedSlice &&
-          <Pie data={selectedSlice}
-               radius={200}
-               hole={120}
-               onClick={::this.handleChartClick}
-               getColor={demo ? getGrayColor : undefined}
-               getLabel={
-                 (slice) => (slice.end - slice.start > 15) &&
-                  (slice.level === 0 ?
-                   (slice.data.label || 'All') + ' (size: ' + getSize(slice.data.value) + ')' :
-                   slice.data.label || slice.data.value)
-               } />
+          <CakeChart data={selectedSlice}
+                     radius={200}
+                     hole={120}
+                     onClick={::this.handleChartClick}
+                     getColor={demo ? getGrayColor : undefined}
+                     getLabel={getLabel} />
         }
       </div>
     );
