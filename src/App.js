@@ -3,8 +3,6 @@ import Input from 'react-bootstrap/lib/Input';
 import Jumbotron from 'react-bootstrap/lib/Jumbotron';
 import CakeChart from 'cake-chart';
 
-console.log(CakeChart);
-
 function getTreeFromStats(json) {
   const tree = json.modules.reduce((t, module) => {
     var path = module.name.split('/');
@@ -94,14 +92,28 @@ export default class App extends Component {
 
     return (
       <div className='container'>
-        <Jumbotron className='text-center'>
+        <Jumbotron>
           <h2 className='text-center'>Webpack Chart</h2>
-          <div style={{display: 'inline-block', marginTop: '30px'}}>
-            <Input type='file'
-                   onChange={::this.handleSelectFile}
-                   wrapperClassName='h5'
-                   standalone />
-          </div>
+          <br/>
+          <p>
+          Generate <code>stats.json</code> for your project with this command:
+          </p>
+          <p>
+          <pre>
+            $ webpack --profile --json > stats.json
+          </pre>
+          </p>
+          <p>
+          and upload it here
+          </p>
+          <Input type='file'
+                 onChange={::this.handleSelectFile}
+                 wrapperClassName='h5'
+                 standalone />
+          <p>
+            Stats graph rendered with{' '}
+            <a href='https://github.com/alexkuz/cake-chart'>Cake Chart</a>.
+          </p>
         </Jumbotron>
         {selectedSlice &&
           <CakeChart data={selectedSlice}
