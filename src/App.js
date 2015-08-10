@@ -62,18 +62,27 @@ function getSize(size) {
   }
 }
 
-function getGrayColor(level) {
-  const gray = Math.min(150 + level * 30, 220);
+function getGrayColor(slice) {
+  const gray = Math.min(150 + slice.level * 30, 220);
   return `rgb(${gray}, ${gray}, ${gray})`;
 }
 
-function getLabel(slice) {
-  return (slice.end - slice.start > 15) &&
+function getGraySliceComponent(slice, idx, Tag, props) {
+  return <Tag {...props} fill={getGrayColor(slice)} />;
+}
+
+function getLabelComponent(demo, slice, idx, Tag, props, label) {
+  const children = (slice.end - slice.start > 15) &&
     (
       slice.level === 0 ?
         `${slice.data.label || 'All'} (size: ${getSize(slice.data.value)})` :
-        slice.data.label || slice.data.value
+        label
     );
+  if (!children) return null;
+
+  return demo ?
+    <Tag {...props} style={{...props.style, background: getGrayColor(slice)}}>{children}</Tag> :
+    <Tag {...props}>{children}</Tag>;
 }
 
 export default class App extends Component {
@@ -120,8 +129,8 @@ export default class App extends Component {
                      radius={200}
                      hole={120}
                      onClick={::this.handleChartClick}
-                     getColor={demo ? getGrayColor : undefined}
-                     getLabel={getLabel} />
+                     getSliceComponent={demo ? getGraySliceComponent : undefined}
+                     getLabelComponent={getLabelComponent.bind(null, demo)} />
         }
       </div>
     );
