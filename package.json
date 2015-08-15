@@ -1,6 +1,6 @@
 {
   "name": "webpack-chart",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Webpack Chart",
   "scripts": {
     "build": "NODE_ENV=production webpack -p",
