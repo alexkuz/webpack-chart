@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import Input from 'react-bootstrap/lib/Input';
-import Jumbotron from 'react-bootstrap/lib/Jumbotron';
 import CakeChart from 'cake-chart';
+import Grid from 'react-bootstrap/lib/Grid';
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
+import Panel from 'react-bootstrap/lib/Panel';
 
 function getTreeFromStats(json) {
   const tree = json.modules.reduce((t, module) => {
@@ -101,40 +104,46 @@ export default class App extends Component {
     const { selectedNode, demo } = this.state;
 
     return (
-      <div className='container'>
-        <Jumbotron>
-          <h2 className='text-center'>Webpack Chart</h2>
-          <br/>
-          <p>
-          Generate <code>stats.json</code> for your project with this command:
-          </p>
-          <p>
-          <pre>
-            $ webpack --profile --json > stats.json
-          </pre>
-          </p>
-          <p>
-          and upload it here
-          </p>
-          <Input type='file'
-                 onChange={this.handleSelectFile}
-                 wrapperClassName='h5'
-                 standalone />
-          <p>
-            Stats graph rendered with{' '}
-            <a href='https://github.com/alexkuz/cake-chart'>Cake Chart</a>.
-          </p>
-        </Jumbotron>
-        {selectedNode &&
-          <CakeChart data={selectedNode}
-                     coreRadius={120}
-                     ringWidth={80}
-                     onClick={this.handleChartClick}
-                     getSliceProps={demo ? getGraySliceProps : undefined}
-                     getLabelProps={getLabelProps.bind(null, demo)}
-                     getLabel={getLabel} />
-        }
-      </div>
+      <Grid fluid>
+        <Row>
+          <Col xs={12} sm={4}>
+            <Panel>
+              <h3 className='text-center'>Webpack Chart</h3>
+              <br/>
+              <p>
+              Generate <code>stats.json</code> for your project with this command:
+              </p>
+              <p>
+              <pre>
+                $ webpack --profile --json > stats.json
+              </pre>
+              </p>
+              <p>
+              and upload it here
+              </p>
+              <Input type='file'
+                     onChange={this.handleSelectFile}
+                     wrapperClassName='h5'
+                     standalone />
+              <p>
+                Stats graph rendered with{' '}
+                <a href='https://github.com/alexkuz/cake-chart'>Cake Chart</a>.
+              </p>
+            </Panel>
+          </Col>
+          <Col xs={12} sm={8}>
+            {selectedNode &&
+              <CakeChart data={selectedNode}
+                         coreRadius={120}
+                         ringWidth={80}
+                         onClick={this.handleChartClick}
+                         getSliceProps={demo ? getGraySliceProps : undefined}
+                         getLabelProps={getLabelProps.bind(null, demo)}
+                         getLabel={getLabel} />
+            }
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 
