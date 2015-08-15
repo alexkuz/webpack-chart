@@ -81,7 +81,7 @@ function getLabel(slice, label) {
   return (slice.end - slice.start > 15) &&
     (
       slice.level === 0 ?
-        `${label || 'All'} (size: ${getSize(slice.data.value)})` :
+        `${label || 'All'} (size: ${getSize(slice.node.value)})` :
         label
     );
 }
