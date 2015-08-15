@@ -22,7 +22,7 @@ function getTreeFromStats(json) {
       node.value += module.size;
 
       return node;
-    }, {children: t});
+    }, { children: t });
 
     return t;
   }, []);
@@ -44,10 +44,10 @@ function getTreeFromStats(json) {
   };
 }
 
-function findParent(slice, child, parent) {
-  if (slice === child) return parent;
+function findParent(node, child, parent) {
+  if (node === child) return parent;
   for (let c of child.children || []) {
-    const p = findParent(slice, c, child);
+    const p = findParent(node, c, child);
     if (p) return p;
   }
 }
@@ -67,22 +67,23 @@ function getGrayColor(slice) {
   return `rgb(${gray}, ${gray}, ${gray})`;
 }
 
-function getGraySliceComponent(slice, idx, Tag, props) {
-  return <Tag {...props} fill={getGrayColor(slice)} />;
+function getGraySliceProps(slice, idx, props) {
+  return { ...props, fill: getGrayColor(slice) };
 }
 
-function getLabelComponent(demo, slice, idx, Tag, props, label) {
-  const children = (slice.end - slice.start > 15) &&
+function getLabelProps(demo, slice, idx, props) {
+  return demo ?
+    { ...props, style: { ...props.style, background: getGrayColor(slice) } } :
+    props;
+}
+
+function getLabel(slice, label) {
+  return (slice.end - slice.start > 15) &&
     (
       slice.level === 0 ?
-        `${slice.data.label || 'All'} (size: ${getSize(slice.data.value)})` :
+        `${label || 'All'} (size: ${getSize(slice.data.value)})` :
         label
     );
-  if (!children) return null;
-
-  return demo ?
-    <Tag {...props} style={{...props.style, background: getGrayColor(slice)}}>{children}</Tag> :
-    <Tag {...props}>{children}</Tag>;
 }
 
 export default class App extends Component {
@@ -90,14 +91,14 @@ export default class App extends Component {
     super(props);
     const tree = getTreeFromStats(props.stats);
     this.state = {
-      tree: tree,
-      selectedSlice: tree,
+      tree,
+      selectedNode: tree,
       demo: true
     };
   }
 
   render() {
-    const { selectedSlice, demo } = this.state;
+    const { selectedNode, demo } = this.state;
 
     return (
       <div className='container'>
@@ -116,7 +117,7 @@ export default class App extends Component {
           and upload it here
           </p>
           <Input type='file'
-                 onChange={::this.handleSelectFile}
+                 onChange={this.handleSelectFile}
                  wrapperClassName='h5'
                  standalone />
           <p>
@@ -124,48 +125,49 @@ export default class App extends Component {
             <a href='https://github.com/alexkuz/cake-chart'>Cake Chart</a>.
           </p>
         </Jumbotron>
-        {selectedSlice &&
-          <CakeChart data={selectedSlice}
-                     radius={200}
-                     hole={120}
-                     onClick={::this.handleChartClick}
-                     getSliceComponent={demo ? getGraySliceComponent : undefined}
-                     getLabelComponent={getLabelComponent.bind(null, demo)} />
+        {selectedNode &&
+          <CakeChart data={selectedNode}
+                     coreRadius={120}
+                     ringWidth={80}
+                     onClick={this.handleChartClick}
+                     getSliceProps={demo ? getGraySliceProps : undefined}
+                     getLabelProps={getLabelProps.bind(null, demo)}
+                     getLabel={getLabel} />
         }
       </div>
     );
   }
 
-  handleChartClick(slice) {
-    if (slice === this.state.selectedSlice) {
-      const parent = findParent(slice, this.state.tree);
+  handleChartClick = node => {
+    if (node === this.state.selectedNode) {
+      const parent = findParent(node, this.state.tree);
       if (parent) {
         this.setState({
-          selectedSlice: parent
+          selectedNode: parent
         });
       }
-    } else if (slice && slice.children && slice.children.length) {
+    } else if (node && node.children && node.children.length) {
       this.setState({
-        selectedSlice: slice
+        selectedNode: node
       });
     }
   }
 
-  handleSelectFile(e) {
+  handleSelectFile = e => {
     var file = e.target.files[0];
 
     var reader = new FileReader();
 
-    reader.onload = ::this.handleFileLoad;
+    reader.onload = this.handleFileLoad;
 
     reader.readAsText(file);
   }
 
-  handleFileLoad(e) {
+  handleFileLoad = e => {
     const json = JSON.parse(e.target.result);
 
     const tree = getTreeFromStats(json);
 
-    this.setState({ selectedSlice: tree, tree: tree, demo: false });
+    this.setState({ selectedNode: tree, tree, demo: false });
   }
 }
