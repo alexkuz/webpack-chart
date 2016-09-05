@@ -9,7 +9,7 @@
     "start": "node server.js",
     "lint": "eslint src",
     "version": "npm run build && git add -A .",
-    "postversion": "git push"
+    "postversion": "git push --tags"
   },
   "repository": {
     "type": "git",

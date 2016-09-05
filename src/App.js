@@ -7,7 +7,8 @@ import Col from 'react-bootstrap/lib/Col';
 import Panel from 'react-bootstrap/lib/Panel';
 
 function getTreeFromStats(json) {
-  const tree = json.modules.reduce((t, module) => {
+  const modules = json.modules || json.children[0].modules;
+  const tree = modules.reduce((t, module) => {
     var path = module.name.split('/');
 
     path.reduce((subnode, segment) => {
